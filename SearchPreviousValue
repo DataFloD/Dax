@@ -1,0 +1,35 @@
+search previous value = 
+//Calculated column intended to find the previous value. For this calculation to work you need a sortable criteria for wich you have ids. The table id should be [sort criteria] & [id]
+VAR myTable = 'myTable'
+VAR isMinCriteria = [sort criteria] = MIN([sort criteria])
+
+VAR rankMyTable =
+    TOPN(
+        1,
+        FILTER(
+            myTable,
+            [sort criteria] < EARLIER([sort criteria])
+            && 
+            [id] = EARLIER([id])
+        ),
+        [sort criteria], DESC
+    )
+
+VAR rowsCount = COUNTROWS(rankMyTable)
+
+VAR PreviousValue = 
+    SELECTCOLUMNS(
+        rankMyTable,
+        "PreviousValue",
+        [my column value]
+    )
+
+RETURN
+SWITCH(
+    TRUE(),
+    isMinCriteria, BLANK(),
+    rowsCount = 0, "New",
+    [my column value] = PreviousValue, "same value",
+    [my column value] & " > " & PreviousValue
+)
+
