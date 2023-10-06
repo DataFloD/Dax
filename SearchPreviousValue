@@ -30,6 +30,6 @@ SWITCH(
     isMinCriteria, BLANK(),
     rowsCount = 0, "New",
     [my column value] = PreviousValue, "same value",
-    PreviousValue & " > " & [my column value] 
+    PreviousValue & " -> " & [my column value] 
 )
 
